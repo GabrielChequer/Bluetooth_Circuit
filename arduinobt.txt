@@ -1,0 +1,127 @@
+
+int kitchen = 2;                 //LED connected to digital pin 2
+int room = 3;                    //LED connected to digital pin 3
+int bath = 4;                    //LED connected to digital pin 4
+int door = 5;                    //LED connected to digital pin 5
+char read_bt;                    //BT Communication
+char led_blink;
+bool kit = LOW;                  //LED starts OFF
+bool rm = LOW;
+bool ba = LOW;
+bool dr = LOW;
+
+void setup() {
+  pinMode(kitchen, OUTPUT);         //Sets the digital pin as output
+  pinMode(room, OUTPUT);
+  pinMode(bath, OUTPUT);
+  pinMode(door, OUTPUT);
+  Serial.begin(9600);               //Opens serial port, sets data rate to 9600 bps
+}
+
+void loop() { 
+  if (Serial.available() > 0) {
+    read_bt = toUpperCase(Serial.read());       //Read next Char from BT
+    switch(read_bt){                            //Switch Char from BT
+      case 'A':
+        Serial.println("Kitchen");              //Kitchen LED
+        if(!kit){                               //If LED is OFF
+          digitalWrite(kitchen, HIGH);          //Turn LED ON
+          Serial.println("HIGH");
+          kit=!kit;                             //Change status of LED to HIGH
+        }
+        else{                                   //If LED is ON
+          digitalWrite(kitchen, LOW);           //Turn LED OFF
+          Serial.println("LOW");
+          kit=!kit;                             //Change status of LED to LOW
+        }
+      break;
+      case 'B':
+        Serial.println("Room");                 //Kitchen LED
+        if(!rm){                                //If LED is OFF
+          digitalWrite(room, HIGH);             //Turn LED ON
+          Serial.println("HIGH");
+          rm=!rm;                               //Change status of LED to HIGH
+        }
+        else{                                   //If LED is ON
+          digitalWrite(room, LOW);              //Turn LED OFF
+          Serial.println("LOW");
+          rm=!rm;                               //Change status of LED to LOW
+        }
+      break;
+      case 'C':
+        Serial.println("Bath");                 //Kitchen LED
+        if(!ba){                                //If LED is OFF
+          digitalWrite(bath, HIGH);             //Turn LED ON
+          Serial.println("HIGH");
+          ba=!ba;                               //Change status of LED to HIGH
+        }
+        else{                                   //If LED is ON
+          digitalWrite(bath, LOW);              //Turn LED OFF
+          Serial.println("LOW");
+          ba=!ba;                               //Change status of LED to LOW
+        }
+      break;
+      case 'D':
+        Serial.println("Door");                 //Kitchen LED
+        if(!dr){                                //If LED is OFF
+          digitalWrite(door, HIGH);             //Turn LED ON
+          Serial.println("HIGH");
+          dr=!dr;                               //Change status of LED to HIGH
+        }
+        else{                                   //If LED is ON
+          digitalWrite(door, LOW);              //Turn LED OFF
+          Serial.println("LOW");
+          dr=!dr;                               //Change status of LED to LOW
+        }
+      break;
+      case 'X':
+        Serial.println("House turned ON");
+        digitalWrite(kitchen, HIGH);
+        digitalWrite(room, HIGH);
+        digitalWrite(bath, HIGH);
+        digitalWrite(door, HIGH);
+        kit=HIGH;
+        rm=HIGH;
+        ba=HIGH;
+        dr=HIGH;
+      break;
+      case 'Y':
+        Serial.println("House turned OFF");
+        digitalWrite(kitchen, LOW);
+        digitalWrite(room, LOW);
+        digitalWrite(bath, LOW);
+        digitalWrite(door, LOW);
+        kit=LOW;
+        rm=LOW;
+        ba=LOW;
+        dr=LOW;
+      break;
+      case 'Z':
+        Serial.println("Blinking");
+        do{
+          digitalWrite(kitchen, HIGH);
+          digitalWrite(room, HIGH);
+          digitalWrite(bath, HIGH);
+          digitalWrite(door, HIGH);
+          delay(500);
+          digitalWrite(kitchen, LOW);
+          digitalWrite(room, LOW);
+          digitalWrite(bath, LOW);
+          digitalWrite(door, LOW);
+          led_blink = toUpperCase(Serial.read());
+          delay(500);
+        }
+        while(led_blink!='S');
+        Serial.println("Blinking stopped");
+        kit=LOW;
+        rm=LOW;
+        ba=LOW;
+        dr=LOW;
+      break;
+      default:
+        Serial.println("Invalid room");
+       break;
+       
+    }
+  }
+}
