@@ -36,7 +36,7 @@ void loop() {
         }
       break;
       case 'B':
-        Serial.println("Room");                 //Kitchen LED
+        Serial.println("Room");                 //Room LED
         if(!rm){                                //If LED is OFF
           digitalWrite(room, HIGH);             //Turn LED ON
           Serial.println("HIGH");
@@ -49,7 +49,7 @@ void loop() {
         }
       break;
       case 'C':
-        Serial.println("Bath");                 //Kitchen LED
+        Serial.println("Bath");                 //Bath LED
         if(!ba){                                //If LED is OFF
           digitalWrite(bath, HIGH);             //Turn LED ON
           Serial.println("HIGH");
@@ -62,16 +62,16 @@ void loop() {
         }
       break;
       case 'D':
-        Serial.println("Door");                 //Kitchen LED
-        if(!dr){                                //If LED is OFF
-          digitalWrite(door, HIGH);             //Turn LED ON
+        Serial.println("Door");                 //Door Lock
+        if(!dr){                                //If Lock is OFF
+          digitalWrite(door, HIGH);             //Turn Lock ON
           Serial.println("HIGH");
-          dr=!dr;                               //Change status of LED to HIGH
+          dr=!dr;                               //Change status of Lock to HIGH
         }
-        else{                                   //If LED is ON
-          digitalWrite(door, LOW);              //Turn LED OFF
+        else{                                   //If Lock is ON
+          digitalWrite(door, LOW);              //Turn Lock OFF
           Serial.println("LOW");
-          dr=!dr;                               //Change status of LED to LOW
+          dr=!dr;                               //Change status of Lock to LOW
         }
       break;
       case 'X':
