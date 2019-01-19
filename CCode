@@ -1,0 +1,97 @@
+#include <avr/io.h>
+
+
+
+
+void LCD_Init(void);            //external Assembly functions
+void UART_Init(void);
+void UART_Clear(void);
+void UART_Get(void);
+void UART_Put(void);
+void delay(void);
+void LCD_Write_Data(void);
+void LCD_Write_Command(void);
+void LCD_Read_Data(void);
+void Mega328P_Init(void);
+void ADC_Get(void);
+void EEPROM_Read(void);
+void EEPROM_Write(void);
+
+unsigned char ASCII;            //shared I/O variable with Assembly
+unsigned char DATA;                //shared internal variable with Assembly
+char HADC;                        //shared ADC variable with Assembly
+char LADC;                        //shared ADC variable with Assembly
+
+
+
+void UART_Puts(const char *str)    //Display a string in the PC Terminal Program
+{
+    while (*str)
+    {
+        ASCII = *str++;
+        UART_Put();
+    }
+}
+
+void LCD_Puts(const char *str)    //Display a string on the LCD Module
+{
+    while (*str)
+    {
+        DATA = *str++;
+        LCD_Write_Data();
+    }
+}
+
+
+void Banner(void)                //Display Tiny OS Banner on Terminal
+{
+}
+
+
+
+void LCD(void)                        //Lite LCD demo
+{
+    DDRB |= 1<<DDRB5;                // Direction of pin PB5 set as Output
+    if (!(PINB & (1<<PINB3))){
+        PORTB &= ~(1<<PORTB5);        // PB7 is low so LED On
+        DATA = 0x34;
+        LCD_Write_Command();
+        DATA = 0x08;
+        LCD_Write_Command();
+        DATA = 0x02;
+        LCD_Write_Command();
+        DATA = 0x06;
+        LCD_Write_Command();
+        DATA = 0x0f;
+        LCD_Write_Command();
+        LCD_Puts("Door Unlocked");    // By default PB7 is high, LED Off
+        UART_Puts("Door Unlocked.\r\n"); 
+    }
+    else{
+        PORTB |= 1<<PORTB5;
+        DATA = 0x34;
+        LCD_Write_Command();
+        DATA = 0x08;
+        LCD_Write_Command();
+        DATA = 0x02;
+        LCD_Write_Command();
+        DATA = 0x06;
+        LCD_Write_Command();
+        DATA = 0x0f;
+        LCD_Write_Command();
+        LCD_Puts("Door Locked    ");   // By default PB7 is high, LED Off
+        UART_Puts("Door Locked.\r\n");    
+    }
+}
+int main(void){
+    int i=0;
+    Mega328P_Init();
+    Banner();
+    while (1){
+        for(i=0;i<50;i++){
+            delay();
+        }
+        UART_Puts("Checking...\r\n");
+        LCD();
+    }
+}
